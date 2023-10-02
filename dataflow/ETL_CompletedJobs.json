@@ -9,7 +9,8 @@
 						"referenceName": "HaulioCommunityPortal_HaulierJobs",
 						"type": "DatasetReference"
 					},
-					"name": "haulierjobs"
+					"name": "haulierjobs",
+					"description": "Import data from HaulioCommunityPortal_HaulierJobs\nd"
 				}
 			],
 			"sinks": [
