@@ -2,7 +2,7 @@
 	"name": "SQL script 2",
 	"properties": {
 		"content": {
-			"query": "-- select value_after, count(*) from dbo.audittrail where data_model_name = 'HaulierJobs' and column_name = 'Stage'\n-- group by value_after\n\n-- SELECT \n--     key_field_id as 'job_id', \n--     max(event_time_utc) as 'time_of_comp'\n-- from audittrail\n-- where data_model_name = 'HaulierJobs' and column_name = 'Stage' and value_after = 'Completed'\n-- group by key_field_id\n\nselect datediff(MINUTE, getdate(), getdate())",
+			"query": "-- select value_after, count(*) from dbo.audittrail where data_model_name = 'HaulierJobs' and column_name = 'Stage'\n-- group by value_after\n\n-- SELECT \n--     key_field_id as 'job_id', \n--     max(event_time_utc) as 'time_of_comp'\n-- from audittrail\n-- where data_model_name = 'HaulierJobs' and column_name = 'Stage' and value_after = 'Completed'\n-- group by key_field_id\n\nselect datediff(MINUTE, getdate(), getdate()), 's' as 'fixed'",
 			"metadata": {
 				"language": "sql"
 			},
