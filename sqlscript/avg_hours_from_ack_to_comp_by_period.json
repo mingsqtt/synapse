@@ -1,0 +1,17 @@
+{
+	"name": "avg_hours_from_ack_to_comp_by_period",
+	"properties": {
+		"content": {
+			"query": "\nselect period, round(avg(datediff(HOUR, ack.time_of_ack, comp.time_of_comp)/24.0), 1) as 'avg_days_from_ack_to_comp', count(*) as 'n_sample' from \n(SELECT \n    key_field_id as 'job_id', \n    min(event_time_utc) as 'time_of_ack',\n    year(min(event_time_utc)) * 100 + month(min(event_time_utc)) as 'period'\nfrom audittrail\nwhere data_model_name = 'HaulierJobs' and column_name = 'Stage' and value_after = 'Acknowledged'\ngroup by key_field_id) ack\ninner join \n(SELECT \n    key_field_id as 'job_id', \n    max(event_time_utc) as 'time_of_comp'\nfrom audittrail\nwhere data_model_name = 'HaulierJobs' and column_name = 'Stage' and value_after = 'Concluded'\ngroup by key_field_id) comp\non ack.job_id = comp.job_id\nwhere datediff(HOUR, ack.time_of_ack, comp.time_of_comp) < 24*8\ngroup by period\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "serverless-sql-pool",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

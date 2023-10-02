@@ -1,0 +1,18 @@
+{
+	"name": "SourceDataset_b81",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "hauliologs_auditrailarchives",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "audit-trail-archivals-cpsg"
+			}
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

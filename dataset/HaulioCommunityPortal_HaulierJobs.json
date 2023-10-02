@@ -1,0 +1,592 @@
+{
+	"name": "HaulioCommunityPortal_HaulierJobs",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HaulioCommunityPortalSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "BillOfLadingNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CarrierBookingReference",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CarrierNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CompanyId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "CreatedAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "CreatedBy",
+				"type": "nvarchar"
+			},
+			{
+				"name": "InvisibilitySetup",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationA_AddressBody",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationA_Floor",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationA_Latitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "LocationA_Longitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "LocationA_PostalCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationA_Unit",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationB_AddressBody",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationB_Floor",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationB_Latitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "LocationB_Longitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "LocationB_PostalCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationB_Unit",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NeededBy",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "Notes",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PermitNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PsaGroupName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ShipperName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Stage",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Status",
+				"type": "bit"
+			},
+			{
+				"name": "Type",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UpdatedAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "UpdatedBy",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VesselName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VisibilitySetup",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Voyage",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VesselEstimatedTimeOfArrival",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "CompanyJobId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "JobCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PreviousStage",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IsLockedForRespondence",
+				"type": "bit"
+			},
+			{
+				"name": "RelatedJobInfoUpdatedAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "RelatedJobInfoUpdatedBy",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HaulioInternalNotes",
+				"type": "nvarchar"
+			},
+			{
+				"name": "JobCreatorReferenceNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TruckInDateTime",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "IsApprovedForBilling",
+				"type": "bit"
+			},
+			{
+				"name": "HaulageBookingReviewId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "IsChatPendingForSearchIndexing",
+				"type": "bit"
+			},
+			{
+				"name": "IsJobInfoPendingForSearchIndexing",
+				"type": "bit"
+			},
+			{
+				"name": "PortnetReference",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Portnet",
+				"type": "bit"
+			},
+			{
+				"name": "TruckOutDateTime",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "ParkingInstructions",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CompanyCustomerId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LoadingBayFloorNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LoadingBayNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationB_CompanyCustomerPICId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "NtpDocumentJobGroupingText",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ChassisDemurrage",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "ChassisDemurrageStartFrom",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "FirstDayToExportToPort",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "FirstDayToTrackFromDepot",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "LastDayToReturnToDepot",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "LastDayToTruckOutFromPort",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "PsaStorerent",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "PlatformSource",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LocationA_Id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LocationB_Id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LocationA_LocationCategory",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LocationB_LocationCategory",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PortTerminalId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "ShipperReference",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CompletedAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "SalesforceId",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IsCustomsEndorsementRequired",
+				"type": "bit"
+			},
+			{
+				"name": "DangerousGoods",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MainJobType",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IsNMT",
+				"type": "bit"
+			},
+			{
+				"name": "NeededByPrefix",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LocationC_AddressBody",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IsOrangePlateRequired",
+				"type": "bit"
+			},
+			{
+				"name": "PartnerCompanyId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LocationC_Floor",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TruckInPrefix",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LocationC_PostalCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TruckOutPrefix",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LocationC_Unit",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LocationC_Id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LocationC_Latitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "LocationC_LocationCategory",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LocationC_Longitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "NeededByLatterDateTime",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "TruckInLatterDateTime",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "TruckOutLatterDateTime",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "ParentHaulierJobId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "ExportDeadline",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "IsFromHcpV2",
+				"type": "bit"
+			},
+			{
+				"name": "BatchNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CustomerContactPerson",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PricingTemplateId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "FamilyHaulierJobId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "IsAutomaticallyApproveJobForBilling",
+				"type": "bit"
+			},
+			{
+				"name": "IsChatDisabled",
+				"type": "bit"
+			},
+			{
+				"name": "IsJobAttachmentDisabled",
+				"type": "bit"
+			},
+			{
+				"name": "LocationA_CompanyCustomerPICId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LocationC_CompanyCustomerPICId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "IsSentChargeDeadlineOverEmail",
+				"type": "bit"
+			},
+			{
+				"name": "EmailRecipientType",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TeamId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "CancellationReason",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CancellationReasonType",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CancellationRemarks",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CancelledAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "CampaignIncentiveAmount",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "IsEligibleForCampaign",
+				"type": "bit"
+			},
+			{
+				"name": "OngoingAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "FullyAssignedAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "BerthNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IsReceivingVesselETBAutoUpdate",
+				"type": "bit"
+			},
+			{
+				"name": "PortnetVesselETBUpdatedAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "AcknowledgedAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "IsCreatedWithAdvancePayment",
+				"type": "bit"
+			},
+			{
+				"name": "PaidAmount",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "ReservedAmount",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "IsPaidToHaulio",
+				"type": "bit"
+			},
+			{
+				"name": "NotificationRecipientJobCreatorPicEmail",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BroadcastedAt",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "HaulierQuotationTemplateId",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "HaulierJobs"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

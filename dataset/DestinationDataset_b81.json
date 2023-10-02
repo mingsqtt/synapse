@@ -1,0 +1,19 @@
+{
+	"name": "DestinationDataset_b81",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "mingsqtt-synapse-workspace-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "audit-trail-archivals-cpsg",
+				"fileSystem": "synapse-blob-fs"
+			}
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}
