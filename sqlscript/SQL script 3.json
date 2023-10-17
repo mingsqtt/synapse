@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 3",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE CompletedHcpJobs\n(\n    RowKey BIGINT NOT NULL,\n    Territory VARCHAR(10) NOT NULL,\n    DataSource VARCHAR(5) NOT NULL,\n    CompletedLocalDateKey INT NOT NULL,\n    JobTypeKey INT NOT NULL,\n    CustomerKey INT NOT NULL,\n    CustomerId INT NOT NULL,\n    ContainerCount INT NOT NULL,\n    TripCount INT NOT NULL,\n    TEUCount INT NOT NULL,\n    TotalRevenueAmount DECIMAL(10, 2) NOT NULL\n)\nWITH (\n    CLUSTERED COLUMNSTORE INDEX,\n    DISTRIBUTION = HASH(Territory),\n    PARTITION (CompletedLocalDateKey RANGE LEFT FOR VALUES (20200101, 20210101, 20220101, 20230101))\n)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "serverless-sql-pool",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
