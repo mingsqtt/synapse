@@ -1,0 +1,1184 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Workspace name",
+			"defaultValue": "mingsqtt-synapse-workspace"
+		},
+		"HaulioCommunityPortalSqlDatabase_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'HaulioCommunityPortalSqlDatabase'"
+		},
+		"hauliologs_auditrailarchives_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hauliologs_auditrailarchives'"
+		},
+		"mingsqtt-synapse-workspace-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'mingsqtt-synapse-workspace-WorkspaceDefaultSqlServer'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:mingsqtt-synapse-workspace.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"mingsqtt-synapse-workspace-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://mingsqttstorageaccount.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/binary_copy_audit-trail-archivals-cpsg')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_b81",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "audit-trail-archivals-cpsg//"
+							},
+							{
+								"name": "Destination",
+								"value": "synapse-blob-fs/audit-trail-archivals-cpsg/"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*"
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								}
+							},
+							"enableStaging": false,
+							"enableSkipIncompatibleRow": false,
+							"skipErrorFile": {
+								"fileMissing": true
+							},
+							"validateDataConsistency": false
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_b81",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_b81",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-27T02:15:36Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/SourceDataset_b81')]",
+				"[concat(variables('workspaceId'), '/datasets/DestinationDataset_b81')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DestinationDataset_b81')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "mingsqtt-synapse-workspace-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "audit-trail-archivals-cpsg",
+						"fileSystem": "synapse-blob-fs"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/mingsqtt-synapse-workspace-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/HaulioCommunityPortal_HaulierJobs')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HaulioCommunityPortalSqlDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "BillOfLadingNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CarrierBookingReference",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CarrierNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CompanyId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "CreatedAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "CreatedBy",
+						"type": "nvarchar"
+					},
+					{
+						"name": "InvisibilitySetup",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationA_AddressBody",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationA_Floor",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationA_Latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "LocationA_Longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "LocationA_PostalCode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationA_Unit",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationB_AddressBody",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationB_Floor",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationB_Latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "LocationB_Longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "LocationB_PostalCode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationB_Unit",
+						"type": "nvarchar"
+					},
+					{
+						"name": "NeededBy",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "Notes",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PermitNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PsaGroupName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ShipperName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Stage",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Status",
+						"type": "bit"
+					},
+					{
+						"name": "Type",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "UpdatedAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "UpdatedBy",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VesselName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VisibilitySetup",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Voyage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VesselEstimatedTimeOfArrival",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "CompanyJobId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "JobCode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PreviousStage",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsLockedForRespondence",
+						"type": "bit"
+					},
+					{
+						"name": "RelatedJobInfoUpdatedAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "RelatedJobInfoUpdatedBy",
+						"type": "nvarchar"
+					},
+					{
+						"name": "HaulioInternalNotes",
+						"type": "nvarchar"
+					},
+					{
+						"name": "JobCreatorReferenceNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TruckInDateTime",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "IsApprovedForBilling",
+						"type": "bit"
+					},
+					{
+						"name": "HaulageBookingReviewId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "IsChatPendingForSearchIndexing",
+						"type": "bit"
+					},
+					{
+						"name": "IsJobInfoPendingForSearchIndexing",
+						"type": "bit"
+					},
+					{
+						"name": "PortnetReference",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Portnet",
+						"type": "bit"
+					},
+					{
+						"name": "TruckOutDateTime",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "ParkingInstructions",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CompanyCustomerId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "LoadingBayFloorNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LoadingBayNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationB_CompanyCustomerPICId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "NtpDocumentJobGroupingText",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ChassisDemurrage",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "ChassisDemurrageStartFrom",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "FirstDayToExportToPort",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "FirstDayToTrackFromDepot",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "LastDayToReturnToDepot",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "LastDayToTruckOutFromPort",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "PsaStorerent",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "PlatformSource",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "LocationA_Id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "LocationB_Id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "LocationA_LocationCategory",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "LocationB_LocationCategory",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PortTerminalId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "ShipperReference",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CompletedAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "SalesforceId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "IsCustomsEndorsementRequired",
+						"type": "bit"
+					},
+					{
+						"name": "DangerousGoods",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MainJobType",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsNMT",
+						"type": "bit"
+					},
+					{
+						"name": "NeededByPrefix",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "LocationC_AddressBody",
+						"type": "nvarchar"
+					},
+					{
+						"name": "IsOrangePlateRequired",
+						"type": "bit"
+					},
+					{
+						"name": "PartnerCompanyId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "LocationC_Floor",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TruckInPrefix",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "LocationC_PostalCode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TruckOutPrefix",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "LocationC_Unit",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LocationC_Id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "LocationC_Latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "LocationC_LocationCategory",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "LocationC_Longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "NeededByLatterDateTime",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "TruckInLatterDateTime",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "TruckOutLatterDateTime",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "ParentHaulierJobId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "ExportDeadline",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "IsFromHcpV2",
+						"type": "bit"
+					},
+					{
+						"name": "BatchNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CustomerContactPerson",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PricingTemplateId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "FamilyHaulierJobId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "IsAutomaticallyApproveJobForBilling",
+						"type": "bit"
+					},
+					{
+						"name": "IsChatDisabled",
+						"type": "bit"
+					},
+					{
+						"name": "IsJobAttachmentDisabled",
+						"type": "bit"
+					},
+					{
+						"name": "LocationA_CompanyCustomerPICId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "LocationC_CompanyCustomerPICId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "IsSentChargeDeadlineOverEmail",
+						"type": "bit"
+					},
+					{
+						"name": "EmailRecipientType",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TeamId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "CancellationReason",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CancellationReasonType",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CancellationRemarks",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CancelledAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "CampaignIncentiveAmount",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "IsEligibleForCampaign",
+						"type": "bit"
+					},
+					{
+						"name": "OngoingAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "FullyAssignedAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "BerthNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "IsReceivingVesselETBAutoUpdate",
+						"type": "bit"
+					},
+					{
+						"name": "PortnetVesselETBUpdatedAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "AcknowledgedAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "IsCreatedWithAdvancePayment",
+						"type": "bit"
+					},
+					{
+						"name": "PaidAmount",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "ReservedAmount",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "IsPaidToHaulio",
+						"type": "bit"
+					},
+					{
+						"name": "NotificationRecipientJobCreatorPicEmail",
+						"type": "nvarchar"
+					},
+					{
+						"name": "BroadcastedAt",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "HaulierQuotationTemplateId",
+						"type": "bigint",
+						"precision": 19
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "HaulierJobs"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/HaulioCommunityPortalSqlDatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SourceDataset_b81')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hauliologs_auditrailarchives",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "audit-trail-archivals-cpsg"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/hauliologs_auditrailarchives')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/HaulioCommunityPortalSqlDatabase')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('HaulioCommunityPortalSqlDatabase_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/hauliologs_auditrailarchives')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('hauliologs_auditrailarchives_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/mingsqtt-synapse-workspace-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('mingsqtt-synapse-workspace-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/mingsqtt-synapse-workspace-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('mingsqtt-synapse-workspace-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ETL_CompletedJobs')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "HaulioCommunityPortal_HaulierJobs",
+								"type": "DatasetReference"
+							},
+							"name": "haulierjobs",
+							"description": "Import data from HaulioCommunityPortal_HaulierJobs\nd"
+						}
+					],
+					"sinks": [
+						{
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "filter1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Id as long,",
+						"          BillOfLadingNumber as string,",
+						"          CarrierBookingReference as string,",
+						"          CarrierNumber as string,",
+						"          CompanyId as long,",
+						"          CreatedAt as timestamp,",
+						"          CreatedBy as string,",
+						"          InvisibilitySetup as string,",
+						"          LocationA_AddressBody as string,",
+						"          LocationA_Floor as string,",
+						"          LocationA_Latitude as double,",
+						"          LocationA_Longitude as double,",
+						"          LocationA_PostalCode as string,",
+						"          LocationA_Unit as string,",
+						"          LocationB_AddressBody as string,",
+						"          LocationB_Floor as string,",
+						"          LocationB_Latitude as double,",
+						"          LocationB_Longitude as double,",
+						"          LocationB_PostalCode as string,",
+						"          LocationB_Unit as string,",
+						"          NeededBy as timestamp,",
+						"          Notes as string,",
+						"          PermitNumber as string,",
+						"          PsaGroupName as string,",
+						"          ShipperName as string,",
+						"          Stage as integer,",
+						"          Status as boolean,",
+						"          Type as integer,",
+						"          UpdatedAt as timestamp,",
+						"          UpdatedBy as string,",
+						"          VesselName as string,",
+						"          VisibilitySetup as integer,",
+						"          Voyage as string,",
+						"          VesselEstimatedTimeOfArrival as timestamp,",
+						"          CompanyJobId as long,",
+						"          JobCode as string,",
+						"          PreviousStage as integer,",
+						"          IsLockedForRespondence as boolean,",
+						"          RelatedJobInfoUpdatedAt as timestamp,",
+						"          RelatedJobInfoUpdatedBy as string,",
+						"          HaulioInternalNotes as string,",
+						"          JobCreatorReferenceNumber as string,",
+						"          TruckInDateTime as timestamp,",
+						"          IsApprovedForBilling as boolean,",
+						"          HaulageBookingReviewId as long,",
+						"          IsChatPendingForSearchIndexing as boolean,",
+						"          IsJobInfoPendingForSearchIndexing as boolean,",
+						"          PortnetReference as string,",
+						"          Portnet as boolean,",
+						"          TruckOutDateTime as timestamp,",
+						"          ParkingInstructions as string,",
+						"          CompanyCustomerId as long,",
+						"          LoadingBayFloorNumber as string,",
+						"          LoadingBayNumber as string,",
+						"          LocationB_CompanyCustomerPICId as long,",
+						"          NtpDocumentJobGroupingText as string,",
+						"          ChassisDemurrage as timestamp,",
+						"          ChassisDemurrageStartFrom as timestamp,",
+						"          FirstDayToExportToPort as timestamp,",
+						"          FirstDayToTrackFromDepot as timestamp,",
+						"          LastDayToReturnToDepot as timestamp,",
+						"          LastDayToTruckOutFromPort as timestamp,",
+						"          PsaStorerent as timestamp,",
+						"          PlatformSource as integer,",
+						"          LocationA_Id as long,",
+						"          LocationB_Id as long,",
+						"          LocationA_LocationCategory as integer,",
+						"          LocationB_LocationCategory as integer,",
+						"          PortTerminalId as long,",
+						"          ShipperReference as string,",
+						"          CompletedAt as timestamp,",
+						"          SalesforceId as string,",
+						"          IsCustomsEndorsementRequired as boolean,",
+						"          DangerousGoods as integer,",
+						"          MainJobType as integer,",
+						"          IsNMT as boolean,",
+						"          NeededByPrefix as integer,",
+						"          LocationC_AddressBody as string,",
+						"          IsOrangePlateRequired as boolean,",
+						"          PartnerCompanyId as long,",
+						"          LocationC_Floor as string,",
+						"          TruckInPrefix as integer,",
+						"          LocationC_PostalCode as string,",
+						"          TruckOutPrefix as integer,",
+						"          LocationC_Unit as string,",
+						"          LocationC_Id as long,",
+						"          LocationC_Latitude as double,",
+						"          LocationC_LocationCategory as integer,",
+						"          LocationC_Longitude as double,",
+						"          NeededByLatterDateTime as timestamp,",
+						"          TruckInLatterDateTime as timestamp,",
+						"          TruckOutLatterDateTime as timestamp,",
+						"          ParentHaulierJobId as long,",
+						"          ExportDeadline as timestamp,",
+						"          IsFromHcpV2 as boolean,",
+						"          BatchNumber as string,",
+						"          CustomerContactPerson as string,",
+						"          PricingTemplateId as long,",
+						"          FamilyHaulierJobId as long,",
+						"          IsAutomaticallyApproveJobForBilling as boolean,",
+						"          IsChatDisabled as boolean,",
+						"          IsJobAttachmentDisabled as boolean,",
+						"          LocationA_CompanyCustomerPICId as long,",
+						"          LocationC_CompanyCustomerPICId as long,",
+						"          IsSentChargeDeadlineOverEmail as boolean,",
+						"          EmailRecipientType as integer,",
+						"          TeamId as long,",
+						"          CancellationReason as string,",
+						"          CancellationReasonType as integer,",
+						"          CancellationRemarks as string,",
+						"          CancelledAt as timestamp,",
+						"          CampaignIncentiveAmount as decimal(18,2),",
+						"          IsEligibleForCampaign as boolean,",
+						"          OngoingAt as timestamp,",
+						"          FullyAssignedAt as timestamp,",
+						"          BerthNumber as string,",
+						"          IsReceivingVesselETBAutoUpdate as boolean,",
+						"          PortnetVesselETBUpdatedAt as timestamp,",
+						"          AcknowledgedAt as timestamp,",
+						"          IsCreatedWithAdvancePayment as boolean,",
+						"          PaidAmount as decimal(18,2),",
+						"          ReservedAmount as decimal(18,2),",
+						"          IsPaidToHaulio as boolean,",
+						"          NotificationRecipientJobCreatorPicEmail as string,",
+						"          BroadcastedAt as timestamp,",
+						"          HaulierQuotationTemplateId as long",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> haulierjobs",
+						"haulierjobs filter(Stage == 3) ~> filter1",
+						"filter1 sink(validateSchema: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     store: 'cache',",
+						"     format: 'inline',",
+						"     output: false,",
+						"     saveOrder: 1) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/HaulioCommunityPortal_HaulierJobs')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- select value_after, count(*) from dbo.audittrail where data_model_name = 'HaulierJobs' and column_name = 'Stage'\n-- group by value_after\n\n-- SELECT \n--     key_field_id as 'job_id', \n--     max(event_time_utc) as 'time_of_comp'\n-- from audittrail\n-- where data_model_name = 'HaulierJobs' and column_name = 'Stage' and value_after = 'Completed'\n-- group by key_field_id\n\nselect datediff(MINUTE, getdate(), getdate()), 's' as 'fixed'",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "serverless-sql-pool",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 3')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE TABLE CompletedHcpJobs\n(\n    RowKey BIGINT NOT NULL,\n    Territory VARCHAR(10) NOT NULL,\n    DataSource VARCHAR(5) NOT NULL,\n    CompletedLocalDateKey INT NOT NULL,\n    JobTypeKey INT NOT NULL,\n    CustomerKey INT NOT NULL,\n    CustomerId INT NOT NULL,\n    ContainerCount INT NOT NULL,\n    TripCount INT NOT NULL,\n    TEUCount INT NOT NULL,\n    TotalRevenueAmount DECIMAL(10, 2) NOT NULL\n)\nWITH (\n    CLUSTERED COLUMNSTORE INDEX,\n    DISTRIBUTION = HASH(Territory),\n    PARTITION (CompletedLocalDateKey RANGE LEFT FOR VALUES (20200101, 20210101, 20220101, 20230101))\n)\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "serverless-sql-pool",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 4')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT \n    IsLatest,\n    count(*) as 'n_record',\n    min(CreatedAt) as 'min_created',\n    max(CreatedAt) as 'max_created',\n    max(UpdatedAt) as 'max_updated',\n    max(SourceRecordId) as 'max_id',\n    max(CompanyKey) as 'max_key'\n FROM [dbo].[Companies]\n group by IsLatest",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "serverless-sql-pool",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/avg_hours_from_ack_to_comp_by_period')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "\nselect period, round(avg(datediff(HOUR, ack.time_of_ack, comp.time_of_comp)/24.0), 1) as 'avg_days_from_ack_to_comp', count(*) as 'n_sample' from \n(SELECT \n    key_field_id as 'job_id', \n    min(event_time_utc) as 'time_of_ack',\n    year(min(event_time_utc)) * 100 + month(min(event_time_utc)) as 'period'\nfrom audittrail\nwhere data_model_name = 'HaulierJobs' and column_name = 'Stage' and value_after = 'Acknowledged'\ngroup by key_field_id) ack\ninner join \n(SELECT \n    key_field_id as 'job_id', \n    max(event_time_utc) as 'time_of_comp'\nfrom audittrail\nwhere data_model_name = 'HaulierJobs' and column_name = 'Stage' and value_after = 'Concluded'\ngroup by key_field_id) comp\non ack.job_id = comp.job_id\nwhere datediff(HOUR, ack.time_of_ack, comp.time_of_comp) < 24*8\ngroup by period\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "serverless-sql-pool",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "08bbcf04-cc55-4c65-bfda-017c4de990f1"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "python"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"import numpy as np\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 5')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (100) [SourceRecordId]\n,[CreatedAt]\n,[CreatedBy]\n,[Status]\n,[UpdatedAt]\n,[UpdatedBy]\n,[CompanyName]\n,[CompanyTypeId]\n,[Email]\n,[FleetSize]\n,[IsVerified]\n,[CompanyKey]\n,[IsLatest]\n,[CompanyTypeName]\n FROM [dbo].[Companies]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "serverless-sql-pool",
+						"poolName": "Built-in"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
