@@ -2,7 +2,7 @@
 	"name": "SQL script 4",
 	"properties": {
 		"content": {
-			"query": "SELECT \n    IsLatest,\n    count(*) as 'n_record',\n    min(CreatedAt) as 'min_created',\n    max(CreatedAt) as 'max_created',\n    max(UpdatedAt) as 'max_updated',\n    max(SourceRecordId) as 'max_id',\n    max(CompanyKey) as 'max_key'\n FROM [dbo].[Companies]\n group by IsLatest",
+			"query": "SELECT \n    IsLatest,\n    count(*) as 'n_record',\n    max(CreatedAt) as 'max_created',\n    max(UpdatedAt) as 'max_updated',\n    max(SourceRecordId) as 'max_id',\n    max(CompanyKey) as 'max_key'\n FROM [dbo].[Companies]\n group by IsLatest",
 			"metadata": {
 				"language": "sql"
 			},

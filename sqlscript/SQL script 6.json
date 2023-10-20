@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 6",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [SourceRecordId]\n,[CreatedAt]\n,[CreatedBy]\n,[Status]\n,[UpdatedAt]\n,[UpdatedBy]\n,[CompanyName]\n,[CompanyTypeId]\n,[Email]\n,[FleetSize]\n,[IsVerified]\n,[CompanyKey]\n,[IsLatest]\n,[CompanyTypeName]\n FROM [dbo].[Companies]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "serverless-sql-pool",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
